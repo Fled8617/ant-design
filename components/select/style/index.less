@@ -382,10 +382,6 @@
     }
   }
 
-  &-allow-clear &-selection--single &-selection-selected-value {
-    padding-right: 16px;
-  }
-
   &-allow-clear &-selection--multiple &-selection__rendered,
   &-show-arrow &-selection--multiple &-selection__rendered {
     margin-right: 20px; // In case that clear button will overlap content
@@ -443,7 +439,7 @@
   // https://github.com/ant-design/ant-design/issues/11456
   // https://github.com/ant-design/ant-design/issues/11843
   font-variant: initial;
-  background-color: @component-background;
+  background-color: @select-dropdown-bg;
   border-radius: @border-radius-base;
   outline: none;
   box-shadow: @box-shadow-base;
@@ -528,7 +524,7 @@
       &-selected {
         color: @text-color;
         font-weight: @select-item-selected-font-weight;
-        background-color: @background-color-light;
+        background-color: @select-item-selected-bg;
       }
 
       &-disabled {
@@ -542,7 +538,7 @@
       }
 
       &-active:not(&-disabled) {
-        background-color: @item-active-bg;
+        background-color: @select-item-active-bg;
       }
 
       &-divider {

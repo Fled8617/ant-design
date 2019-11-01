@@ -16,7 +16,7 @@ const eslintrc = {
   },
   settings: {
     react: {
-      version: '16.8',
+      version: '16.9',
     },
   },
   parser: '@typescript-eslint/parser',
@@ -70,6 +70,7 @@ const eslintrc = {
     'import/no-cycle': 0,
     'react/no-find-dom-node': 0,
     'no-underscore-dangle': 0,
+    'react/sort-comp': 0,
     // label-has-for has been deprecated
     // https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-for.md
     'jsx-a11y/label-has-for': 0,
@@ -84,14 +85,17 @@ const eslintrc = {
     'max-classes-per-file': 0,
     'react/static-property-placement': 0,
   },
+  globals: {
+    gtag: true,
+  },
 };
 
 if (process.env.RUN_ENV === 'DEMO') {
-  eslintrc.globals = {
+  eslintrc.globals = Object.assign(eslintrc.globals, {
     React: true,
     ReactDOM: true,
     mountNode: true,
-  };
+  });
 
   Object.assign(eslintrc.rules, {
     indent: 0,
