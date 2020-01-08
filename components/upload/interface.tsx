@@ -40,6 +40,7 @@ export interface UploadFile<T = any> {
   error?: any;
   linkProps?: any;
   type: string;
+  xhr?: T;
   preview?: string;
 }
 
@@ -80,6 +81,7 @@ export interface UploadProps {
   action?: string | ((file: RcFile) => string) | ((file: RcFile) => PromiseLike<string>);
   directory?: boolean;
   data?: object | ((file: UploadFile) => object);
+  method?: 'POST' | 'PUT' | 'post' | 'put';
   headers?: HttpRequestHeader;
   showUploadList?: boolean | ShowUploadListInterface;
   multiple?: boolean;
@@ -102,6 +104,7 @@ export interface UploadProps {
   id?: string;
   previewFile?: PreviewFileHandler;
   transformFile?: TransformFileHandler;
+  iconRender?: (file: UploadFile, listType?: UploadListType) => React.ReactNode;
 }
 
 export interface UploadState {
@@ -122,4 +125,5 @@ export interface UploadListProps {
   showPreviewIcon?: boolean;
   locale: UploadLocale;
   previewFile?: PreviewFileHandler;
+  iconRender?: (file: UploadFile, listType?: UploadListType) => React.ReactNode;
 }

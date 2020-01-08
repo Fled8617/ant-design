@@ -5,6 +5,7 @@ import Form from '../../form';
 import Input from '..';
 import focusTest from '../../../tests/shared/focusTest';
 import mountTest from '../../../tests/shared/mountTest';
+import rtlTest from '../../../tests/shared/rtlTest';
 import calculateNodeHeight, { calculateNodeStyling } from '../calculateNodeHeight';
 
 const { TextArea } = Input;
@@ -23,6 +24,9 @@ describe('Input', () => {
   focusTest(Input);
   mountTest(Input);
   mountTest(Input.Group);
+
+  rtlTest(Input);
+  rtlTest(Input.Group);
 
   it('should support maxLength', () => {
     const wrapper = mount(<Input maxLength={3} />);
@@ -75,7 +79,7 @@ describe('TextArea', () => {
 
   it('should auto calculate height according to content length', () => {
     const wrapper = mount(<TextArea value="" readOnly autoSize />);
-    const mockFunc = jest.spyOn(wrapper.instance(), 'resizeTextarea');
+    const mockFunc = jest.spyOn(wrapper.instance().resizableTextArea, 'resizeTextarea');
     wrapper.setProps({ value: '1111\n2222\n3333' });
     jest.runAllTimers();
     expect(mockFunc).toHaveBeenCalledTimes(1);
@@ -161,7 +165,7 @@ describe('TextArea', () => {
 
   it('when prop value not in this.props, resizeTextarea should be called', () => {
     const wrapper = mount(<TextArea aria-label="textarea" />);
-    const resizeTextarea = jest.spyOn(wrapper.instance(), 'resizeTextarea');
+    const resizeTextarea = jest.spyOn(wrapper.instance().resizableTextArea, 'resizeTextarea');
     wrapper.find('textarea').simulate('change', 'test');
     expect(resizeTextarea).toHaveBeenCalled();
   });
@@ -176,33 +180,57 @@ describe('TextArea', () => {
     expect(onPressEnter).toHaveBeenCalled();
     expect(onKeyDown).toHaveBeenCalled();
   });
+
+  it('should trigger onResize', () => {
+    const onResize = jest.fn();
+    const wrapper = mount(<TextArea onResize={onResize} autosize />);
+
+    wrapper
+      .find('ResizeObserver')
+      .instance()
+      .onResize([
+        {
+          target: {
+            getBoundingClientRect() {
+              return {};
+            },
+          },
+        },
+      ]);
+
+    expect(onResize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: expect.any(Number),
+        height: expect.any(Number),
+      }),
+    );
+  });
 });
 
 describe('As Form Control', () => {
   it('should be reset when wrapped in form.getFieldDecorator without initialValue', () => {
-    class Demo extends React.Component {
-      reset = () => {
-        const { form } = this.props;
+    const Demo = () => {
+      const [form] = Form.useForm();
+      const reset = () => {
         form.resetFields();
       };
 
-      render() {
-        const {
-          form: { getFieldDecorator },
-        } = this.props;
-        return (
-          <Form>
-            <Form.Item>{getFieldDecorator('input')(<Input />)}</Form.Item>
-            <Form.Item>{getFieldDecorator('textarea')(<Input.TextArea />)}</Form.Item>
-            <button type="button" onClick={this.reset}>
-              reset
-            </button>
-          </Form>
-        );
-      }
-    }
-    const DemoForm = Form.create()(Demo);
-    const wrapper = mount(<DemoForm />);
+      return (
+        <Form form={form}>
+          <Form.Item name="input">
+            <Input />
+          </Form.Item>
+          <Form.Item name="textarea">
+            <Input.TextArea />
+          </Form.Item>
+          <button type="button" onClick={reset}>
+            reset
+          </button>
+        </Form>
+      );
+    };
+
+    const wrapper = mount(<Demo />);
     wrapper.find('input').simulate('change', { target: { value: '111' } });
     wrapper.find('textarea').simulate('change', { target: { value: '222' } });
     expect(wrapper.find('input').prop('value')).toBe('111');
@@ -315,5 +343,103 @@ describe('Input allowClear', () => {
   it('should not support allowClear when it is disabled', () => {
     const wrapper = mount(<Input allowClear defaultValue="111" disabled />);
     expect(wrapper.find('.ant-input-clear-icon').length).toBe(0);
+  });
+});
+
+describe('TextArea allowClear', () => {
+  it('should change type when click', () => {
+    const wrapper = mount(<TextArea allowClear />);
+    wrapper.find('textarea').simulate('change', { target: { value: '111' } });
+    expect(wrapper.find('textarea').getDOMNode().value).toEqual('111');
+    expect(wrapper).toMatchSnapshot();
+    wrapper
+      .find('.ant-input-textarea-clear-icon')
+      .at(0)
+      .simulate('click');
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('textarea').getDOMNode().value).toEqual('');
+  });
+
+  it('should not show icon if value is undefined, null or empty string', () => {
+    const wrappers = [null, undefined, ''].map(val => mount(<TextArea allowClear value={val} />));
+    wrappers.forEach(wrapper => {
+      expect(wrapper.find('textarea').getDOMNode().value).toEqual('');
+      expect(wrapper.find('.ant-input-textarea-clear-icon').exists()).toEqual(false);
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
+  it('should not show icon if defaultValue is undefined, null or empty string', () => {
+    const wrappers = [null, undefined, ''].map(val =>
+      mount(<TextArea allowClear defaultValue={val} />),
+    );
+    wrappers.forEach(wrapper => {
+      expect(wrapper.find('textarea').getDOMNode().value).toEqual('');
+      expect(wrapper.find('.ant-textarea-clear-icon').exists()).toEqual(false);
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
+  it('should trigger event correctly', () => {
+    let argumentEventObject;
+    let argumentEventObjectValue;
+    const onChange = e => {
+      argumentEventObject = e;
+      argumentEventObjectValue = e.target.value;
+    };
+    const wrapper = mount(<TextArea allowClear defaultValue="111" onChange={onChange} />);
+    wrapper
+      .find('.ant-input-textarea-clear-icon')
+      .at(0)
+      .simulate('click');
+    expect(argumentEventObject.type).toBe('click');
+    expect(argumentEventObjectValue).toBe('');
+    expect(
+      wrapper
+        .find('textarea')
+        .at(0)
+        .getDOMNode().value,
+    ).toBe('');
+  });
+
+  it('should trigger event correctly on controlled mode', () => {
+    let argumentEventObject;
+    let argumentEventObjectValue;
+    const onChange = e => {
+      argumentEventObject = e;
+      argumentEventObjectValue = e.target.value;
+    };
+    const wrapper = mount(<TextArea allowClear value="111" onChange={onChange} />);
+    wrapper
+      .find('.ant-input-textarea-clear-icon')
+      .at(0)
+      .simulate('click');
+    expect(argumentEventObject.type).toBe('click');
+    expect(argumentEventObjectValue).toBe('');
+    expect(
+      wrapper
+        .find('textarea')
+        .at(0)
+        .getDOMNode().value,
+    ).toBe('111');
+  });
+
+  it('should focus textarea after clear', () => {
+    const wrapper = mount(<TextArea allowClear defaultValue="111" />);
+    wrapper
+      .find('.ant-input-textarea-clear-icon')
+      .at(0)
+      .simulate('click');
+    expect(document.activeElement).toBe(
+      wrapper
+        .find('textarea')
+        .at(0)
+        .getDOMNode(),
+    );
+  });
+
+  it('should not support allowClear when it is disabled', () => {
+    const wrapper = mount(<TextArea allowClear defaultValue="111" disabled />);
+    expect(wrapper.find('.ant-input-textarea-clear-icon').length).toBe(0);
   });
 });

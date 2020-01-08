@@ -1,9 +1,24 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Modal, message, Icon } from 'antd';
+import { Modal, message } from 'antd';
 import { Link } from 'bisheng/router';
 import RcFooter from 'rc-footer';
 import { presetPalettes } from '@ant-design/colors';
+import {
+  AntDesignOutlined,
+  MediumOutlined,
+  TwitterOutlined,
+  ZhihuOutlined,
+  UsergroupAddOutlined,
+  GithubOutlined,
+  HistoryOutlined,
+  ProfileOutlined,
+  BugOutlined,
+  IssuesCloseOutlined,
+  BookOutlined,
+  MessageOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
 import { isLocalStorageNameSupported, loadScript, getLocalizedPathname } from '../utils';
 import ColorPicker from '../Color/ColorPicker';
 
@@ -115,44 +130,44 @@ class Footer extends React.Component {
         title: <FormattedMessage id="app.footer.community" />,
         items: [
           {
-            icon: <Icon type="ant-design" />,
+            icon: <AntDesignOutlined />,
             title: <FormattedMessage id="app.footer.awesome" />,
             url: 'https://github.com/websemantics/awesome-ant-design',
             openExternal: true,
           },
           {
-            icon: <Icon type="medium" />,
+            icon: <MediumOutlined />,
             title: 'Medium',
             url: 'http://medium.com/ant-design/',
             openExternal: true,
           },
           {
-            icon: <Icon type="twitter" style={{ color: '#1DA1F2' }} />,
+            icon: <TwitterOutlined style={{ color: '#1DA1F2' }} />,
             title: 'Twitter',
             url: 'http://twitter.com/antdesignui',
             openExternal: true,
           },
           {
-            icon: <Icon type="zhihu" style={{ color: '#0084ff' }} />,
+            icon: <ZhihuOutlined style={{ color: '#0084ff' }} />,
             title: <FormattedMessage id="app.footer.zhihu" />,
             url: 'http://zhuanlan.zhihu.com/antdesign',
             openExternal: true,
           },
           {
-            icon: <Icon type="zhihu" style={{ color: '#0084ff' }} />,
+            icon: <ZhihuOutlined style={{ color: '#0084ff' }} />,
             title: <FormattedMessage id="app.footer.zhihu.xtech" />,
             url: 'http://zhuanlan.zhihu.com/xtech',
             openExternal: true,
           },
           {
-            icon: <Icon type="zhihu" style={{ color: '#0084ff' }} />,
+            icon: <ZhihuOutlined style={{ color: '#0084ff' }} />,
             title: 'SEE Conf',
             description: <FormattedMessage id="app.footer.seeconf" />,
             url: 'https://seeconf.antfin.com/',
             openExternal: true,
           },
           {
-            icon: <Icon type="usergroup-add" />,
+            icon: <UsergroupAddOutlined />,
             title: <FormattedMessage id="app.footer.work_with_us" />,
             url: getLocalizedPathname('/docs/spec/work-with-us', isZhCN),
             LinkComponent: Link,
@@ -163,61 +178,61 @@ class Footer extends React.Component {
         title: <FormattedMessage id="app.footer.help" />,
         items: [
           {
-            icon: <Icon type="github" />,
+            icon: <GithubOutlined />,
             title: 'GitHub',
             url: 'https://github.com/ant-design/ant-design',
             openExternal: true,
           },
           {
-            icon: <Icon type="history" />,
+            icon: <HistoryOutlined />,
             title: <FormattedMessage id="app.footer.change-log" />,
             url: getLocalizedPathname('/changelog', isZhCN),
             LinkComponent: Link,
           },
           {
-            icon: <Icon type="profile" />,
+            icon: <ProfileOutlined />,
             title: <FormattedMessage id="app.footer.faq" />,
             url: getLocalizedPathname('/docs/react/faq', isZhCN),
             LinkComponent: Link,
           },
           {
-            icon: <Icon type="bug" />,
+            icon: <BugOutlined />,
             title: <FormattedMessage id="app.footer.bug-report" />,
             url: 'https://new-issue.ant.design/',
             openExternal: true,
           },
           {
-            icon: <Icon type="issues-close" />,
+            icon: <IssuesCloseOutlined />,
             title: <FormattedMessage id="app.footer.issues" />,
             url: 'https://github.com/ant-design/ant-design/issues',
             openExternal: true,
           },
           {
-            icon: <Icon type="book" />,
+            icon: <BookOutlined />,
             title: <FormattedMessage id="app.footer.course" />,
             url: 'https://www.yuque.com/ant-design/course',
             openExternal: true,
           },
           {
-            icon: <Icon type="message" />,
+            icon: <MessageOutlined />,
             title: <FormattedMessage id="app.footer.discuss-cn" />,
             url: 'https://gitter.im/ant-design/ant-design',
             openExternal: true,
           },
           {
-            icon: <Icon type="message" />,
+            icon: <MessageOutlined />,
             title: <FormattedMessage id="app.footer.discuss-en" />,
             url: 'https://gitter.im/ant-design/ant-design-english',
             openExternal: true,
           },
           {
-            icon: <Icon type="question-circle" />,
+            icon: <QuestionCircleOutlined />,
             title: <FormattedMessage id="app.footer.stackoverflow" />,
             url: 'http://stackoverflow.com/questions/tagged/antd',
             openExternal: true,
           },
           {
-            icon: <Icon type="question-circle" />,
+            icon: <QuestionCircleOutlined />,
             title: <FormattedMessage id="app.footer.segmentfault" />,
             url: 'https://segmentfault.com/t/antd',
             openExternal: true,
@@ -228,7 +243,7 @@ class Footer extends React.Component {
         icon: (
           <img
             src="https://gw.alipayobjects.com/zos/rmsportal/nBVXkrFdWHxbZlmMbsaH.svg"
-            alt="AFX Cloud"
+            alt="Ant XTech"
           />
         ),
         title: <FormattedMessage id="app.footer.more-product" />,
@@ -240,9 +255,9 @@ class Footer extends React.Component {
                 alt="yuque"
               />
             ),
-            title: '语雀',
+            title: <FormattedMessage id="app.footer.yuque" />,
             url: 'https://yuque.com',
-            description: '知识创作与分享工具',
+            description: <FormattedMessage id="app.footer.yuque.slogan" />,
             openExternal: true,
           },
           {
@@ -252,9 +267,9 @@ class Footer extends React.Component {
                 alt="yunfengdie"
               />
             ),
-            title: '云凤蝶',
+            title: <FormattedMessage id="app.footer.fengdie" />,
             url: 'https://yunfengdie.com',
-            description: '中台建站平台',
+            description: <FormattedMessage id="app.footer.fengdie.slogan" />,
             openExternal: true,
           },
           {
@@ -265,8 +280,8 @@ class Footer extends React.Component {
               />
             ),
             title: 'AntV',
-            url: 'https://antv.alipay.com',
-            description: '数据可视化',
+            url: 'https://antv.vision',
+            description: <FormattedMessage id="app.footer.antv.slogan" />,
             openExternal: true,
           },
           {
@@ -278,7 +293,7 @@ class Footer extends React.Component {
             ),
             title: 'Egg',
             url: 'https://eggjs.org',
-            description: '企业级 Node 开发框架',
+            description: <FormattedMessage id="app.footer.egg.slogan" />,
             openExternal: true,
           },
           {
@@ -300,7 +315,7 @@ class Footer extends React.Component {
                 alt="xtech"
               />
             ),
-            title: '蚂蚁体验科技',
+            title: <FormattedMessage id="app.footer.xtech" />,
             url: 'https://xtech.antfin.com/',
             openExternal: true,
           },
@@ -327,7 +342,6 @@ class Footer extends React.Component {
         })
         .then(() => {
           hide();
-          Icon.setTwoToneColor({ primaryColor: color });
           message.success(messages['app.footer.primary-color-changed']);
           this.setState({ color });
         });
