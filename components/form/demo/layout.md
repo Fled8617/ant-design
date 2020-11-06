@@ -14,11 +14,12 @@ title:
 There are three layout for form: `horizontal`, `vertical`, `inline`.
 
 ```tsx
+import React, { useState } from 'react';
 import { Form, Input, Button, Radio } from 'antd';
 
 const FormLayoutDemo = () => {
   const [form] = Form.useForm();
-  const [formLayout, setFormLayout] = React.useState('horizontal');
+  const [formLayout, setFormLayout] = useState('horizontal');
 
   const onFormLayoutChange = ({ layout }) => {
     setFormLayout(layout);
@@ -40,7 +41,7 @@ const FormLayoutDemo = () => {
       : null;
 
   return (
-    <div>
+    <>
       <Form
         {...formItemLayout}
         layout={formLayout}
@@ -65,7 +66,7 @@ const FormLayoutDemo = () => {
           <Button type="primary">Submit</Button>
         </Form.Item>
       </Form>
-    </div>
+    </>
   );
 };
 

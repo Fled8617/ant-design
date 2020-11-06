@@ -30,8 +30,8 @@ export default function useLazyKVMap<RecordType>(
           const rowKey = getRowKey(record, index);
           kvMap.set(rowKey, record);
 
-          if (childrenColumnName in record) {
-            dig((record as any)[childrenColumnName]);
+          if (record && typeof record === 'object' && childrenColumnName in record) {
+            dig((record as any)[childrenColumnName] || []);
           }
         });
       }

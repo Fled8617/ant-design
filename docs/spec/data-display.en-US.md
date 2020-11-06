@@ -1,7 +1,7 @@
 ---
 category: Design Patterns
 type: Global Rules
-order: 99
+order: 4
 title: Data Display
 ---
 
@@ -21,7 +21,7 @@ The table is recognized as one of the clearest and most efficient forms of prese
 > Note:
 >
 > 1. The time, status, and action bar in the table need to keep the words intact without occupying multiple lines.
-> 2. When the data is empty, use "- -" to indicate that there is no data.
+> 2. When table cell is empty, use `-` to indicate that there is no data.
 
 ## Collapse
 

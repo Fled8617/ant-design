@@ -1,8 +1,9 @@
 ---
 category: Design Patterns
 type: Global Rules
-order: 8
+order: 2
 title: Navigation
+skip: true
 ---
 
 Broadly speaking, anything telling users where they are, where to go and how to get there can be called navigation. When using navigation or customizing navigational structures, please pay attention to following common pitfalls:

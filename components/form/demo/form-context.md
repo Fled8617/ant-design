@@ -14,6 +14,7 @@ title:
 Use `Form.Provider` to process data between forms. In this case, submit button is in the Modal which is out of Form. You can use `form.submit` to submit form. Besides, we recommend native `<Button htmlType="submit" />` to submit a form.
 
 ```tsx
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Modal, Button, Avatar, Typography } from 'antd';
 import { SmileOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -30,12 +31,28 @@ interface ModalFormProps {
   onCancel: () => void;
 }
 
+// reset form fields when modal is form, closed
+const useResetFormOnCloseModal = ({ form, visible }) => {
+  const prevVisibleRef = useRef();
+  useEffect(() => {
+    prevVisibleRef.current = visible;
+  }, [visible]);
+  const prevVisible = prevVisibleRef.current;
+
+  useEffect(() => {
+    if (!visible && prevVisible) {
+      form.resetFields();
+    }
+  }, [visible]);
+};
+
 const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel }) => {
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    form.resetFields();
-  }, [visible]);
+  useResetFormOnCloseModal({
+    form,
+    visible,
+  });
 
   const onOk = () => {
     form.submit();
@@ -56,7 +73,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel }) => {
 };
 
 const Demo = () => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   const showUserModal = () => {
     setVisible(true);
@@ -71,7 +88,7 @@ const Demo = () => {
   };
 
   return (
-    <div>
+    <>
       <Form.Provider
         onFormFinish={(name, { values, forms }) => {
           if (name === 'userForm') {
@@ -112,7 +129,7 @@ const Demo = () => {
             <Button htmlType="submit" type="primary">
               Submit
             </Button>
-            <Button htmlType="button" style={{ marginLeft: 8 }} onClick={showUserModal}>
+            <Button htmlType="button" style={{ margin: '0 8px' }} onClick={showUserModal}>
               Add User
             </Button>
           </Form.Item>
@@ -120,7 +137,7 @@ const Demo = () => {
 
         <ModalForm visible={visible} onCancel={hideUserModal} />
       </Form.Provider>
-    </div>
+    </>
   );
 };
 
@@ -134,5 +151,10 @@ ReactDOM.render(<Demo />, mountNode);
 
 #components-form-demo-form-context .user .ant-avatar {
   margin-right: 8px;
+}
+
+.ant-row-rtl #components-form-demo-form-context .user .ant-avatar {
+  margin-right: 0;
+  margin-left: 8px;
 }
 ```

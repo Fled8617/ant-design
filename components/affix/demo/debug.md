@@ -2,7 +2,7 @@
 order: 99
 title:
   zh-CN: 调整浏览器大小，观察 Affix 容器是否发生变化。跟随变化为正常。#17678
-  en-US:
+  en-US: debug
 debug: true
 ---
 
@@ -15,10 +15,10 @@ DEBUG
 DEBUG
 
 ```tsx
-import React, { useState, FC } from 'react';
+import React, { useState } from 'react';
 import { Affix, Button } from 'antd';
 
-const Demo: FC = () => {
+const Demo: React.FC = () => {
   const [top, setTop] = useState(10);
   return (
     <div style={{ height: 10000 }}>

@@ -3,6 +3,7 @@ category: Components
 type: Data Display
 title: Empty
 cols: 1
+cover: https://gw.alipayobjects.com/zos/alicdn/MNbKfLBVb/Empty.svg
 ---
 
 Empty state placeholder.
@@ -22,9 +23,9 @@ Empty state placeholder.
 
 | Property | Description | Type | Default | Version |
 | --- | --- | --- | --- | --- |
-| description | Customize description | string \| ReactNode | - |  |
-| imageStyle | style of image | CSSProperties | - |  |
-| image | Customize image. Will tread as image url when string provided. | string \| ReactNode | `Empty.PRESENTED_IMAGE_DEFAULT` |  |
+| description | Customize description | ReactNode | - |  |
+| image | Customize image. Will treat as image url when string provided | ReactNode | `Empty.PRESENTED_IMAGE_DEFAULT` |  |
+| imageStyle | The style of image | CSSProperties | - |  |
 
 ## Built-in images
 
@@ -52,7 +53,7 @@ Empty state placeholder.
     background-image: url("https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png");
   }
   [data-theme="dark"] .site-empty-buildIn-simple {
-    background-image: url("https://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/antfincdn/oQFqhkmNPw/a38d2cdb-a33d-407c-8f8e-e3429699175d.png");
+    background-image: url("https://gw.alipayobjects.com/zos/antfincdn/ldFsHUh3Xh/ea62c5fe-07bb-4fcd-9d35-19220cef372e.png");
   }
   [data-theme="dark"] .site-empty-buildIn-default {
     background-image: url("https://gw.alipayobjects.com/mdn/rms_08e378/afts/img/A*gfq-SoT3wF0AAAAAAAAAAABkARQnAQ");

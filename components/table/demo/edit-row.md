@@ -14,6 +14,7 @@ title:
 Table with editable rows.
 
 ```tsx
+import React, { useState } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
 
 interface Item {
@@ -32,10 +33,10 @@ for (let i = 0; i < 100; i++) {
     address: `London Park no. ${i}`,
   });
 }
-interface EditableCellProps {
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
-  title: React.ReactNode;
+  title: any;
   inputType: 'number' | 'text';
   record: Item;
   index: number;
@@ -78,13 +79,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 const EditableTable = () => {
   const [form] = Form.useForm();
-  const [data, setData] = React.useState(originData);
-  const [editingKey, setEditingKey] = React.useState('');
+  const [data, setData] = useState(originData);
+  const [editingKey, setEditingKey] = useState('');
 
-  const isEditing = record => record.key === editingKey;
+  const isEditing = (record: Item) => record.key === editingKey;
 
-  const edit = record => {
-    form.setFieldsValue({ ...record });
+  const edit = (record: Item) => {
+    form.setFieldsValue({ name: '', age: '', address: '', ...record });
     setEditingKey(record.key);
   };
 
@@ -92,9 +93,9 @@ const EditableTable = () => {
     setEditingKey('');
   };
 
-  const save = async key => {
+  const save = async (key: React.Key) => {
     try {
-      const row = await form.validateFields();
+      const row = (await form.validateFields()) as Item;
 
       const newData = [...data];
       const index = newData.findIndex(item => key === item.key);
@@ -113,7 +114,6 @@ const EditableTable = () => {
       }
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo);
-      return;
     }
   };
 
@@ -139,14 +139,14 @@ const EditableTable = () => {
     {
       title: 'operation',
       dataIndex: 'operation',
-      render: (text, record) => {
+      render: (_: any, record: Item) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
             <a href="javascript:;" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
               Save
             </a>
-            <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
+            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
               <a>Cancel</a>
             </Popconfirm>
           </span>
@@ -159,19 +159,13 @@ const EditableTable = () => {
     },
   ];
 
-  const components = {
-    body: {
-      cell: EditableCell,
-    },
-  };
-
   const mergedColumns = columns.map(col => {
     if (!col.editable) {
       return col;
     }
     return {
       ...col,
-      onCell: record => ({
+      onCell: (record: Item) => ({
         record,
         inputType: col.dataIndex === 'age' ? 'number' : 'text',
         dataIndex: col.dataIndex,
@@ -184,7 +178,11 @@ const EditableTable = () => {
   return (
     <Form form={form} component={false}>
       <Table
-        components={components}
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
         bordered
         dataSource={data}
         columns={mergedColumns}
@@ -201,9 +199,9 @@ ReactDOM.render(<EditableTable />, mountNode);
 ```
 
 ```css
-.editable-row .ant-form-explain {
+.editable-row .ant-form-item-explain {
   position: absolute;
+  top: 100%;
   font-size: 12px;
-  margin-top: -4px;
 }
 ```

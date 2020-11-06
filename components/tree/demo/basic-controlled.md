@@ -14,9 +14,8 @@ title:
 Controlled mode lets parent nodes reflect the status of child nodes more intelligently.
 
 ```tsx
+import React, { useState } from 'react';
 import { Tree } from 'antd';
-
-const { TreeNode } = Tree;
 
 const treeData = [
   {
@@ -63,10 +62,10 @@ const treeData = [
 ];
 
 const Demo = () => {
-  const [expandedKeys, setExpandedKeys] = React.useState<string[]>(['0-0-0', '0-0-1']);
-  const [checkedKeys, setCheckedKeys] = React.useState<string[]>(['0-0-0']);
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
-  const [autoExpandParent, setAutoExpandParent] = React.useState<boolean>(true);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>(['0-0-0', '0-0-1']);
+  const [checkedKeys, setCheckedKeys] = useState<string[]>(['0-0-0']);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
 
   const onExpand = expandedKeys => {
     console.log('onExpand', expandedKeys);

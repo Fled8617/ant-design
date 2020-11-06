@@ -14,6 +14,7 @@ title:
 Config component default size.
 
 ```jsx
+import React, { useState } from 'react';
 import {
   ConfigProvider,
   Radio,
@@ -27,7 +28,7 @@ import {
 } from 'antd';
 
 const FormSizeDemo = () => {
-  const [componentSize, setComponentSize] = React.useState('small');
+  const [componentSize, setComponentSize] = useState('small');
   return (
     <div>
       <Radio.Group
@@ -46,10 +47,19 @@ const FormSizeDemo = () => {
           <Input />
         </div>
         <div className="example">
+          <Input.Search allowClear />
+        </div>
+        <div className="example">
+          <Input.TextArea allowClear />
+        </div>
+        <div className="example">
           <Select defaultValue="demo" options={[{ value: 'demo' }]} />
         </div>
         <div className="example">
           <DatePicker />
+        </div>
+        <div className="example">
+          <DatePicker.RangePicker />
         </div>
         <div className="example">
           <Button>Button</Button>

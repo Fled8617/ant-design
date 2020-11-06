@@ -14,6 +14,7 @@ title:
 Fill in this form to create a new account for you.
 
 ```tsx
+import React, { useState } from 'react';
 import {
   Form,
   Input,
@@ -96,10 +97,6 @@ const RegistrationForm = () => {
     console.log('Received values of form: ', values);
   };
 
-  const onFinishFailed = ({ errorFields }) => {
-    form.scrollToField(errorFields[0].name);
-  };
-
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
@@ -109,7 +106,7 @@ const RegistrationForm = () => {
     </Form.Item>
   );
 
-  const [autoCompleteResult, setAutoCompleteResult] = React.useState([]);
+  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
   const onWebsiteChange = value => {
     if (!value) {
@@ -130,11 +127,11 @@ const RegistrationForm = () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       initialValues={{
         residence: ['zhejiang', 'hangzhou', 'xihu'],
         prefix: '86',
       }}
+      scrollToFirstError
     >
       <Form.Item
         name="email"
@@ -182,7 +179,7 @@ const RegistrationForm = () => {
               if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-              return Promise.reject('Two passwords that you enter is inconsistent!');
+              return Promise.reject('The two passwords that you entered do not match!');
             },
           }),
         ]}
@@ -250,7 +247,17 @@ const RegistrationForm = () => {
         </Row>
       </Form.Item>
 
-      <Form.Item name="agreement" valuePropName="checked" {...tailFormItemLayout}>
+      <Form.Item
+        name="agreement"
+        valuePropName="checked"
+        rules={[
+          {
+            validator: (_, value) =>
+              value ? Promise.resolve() : Promise.reject('Should accept agreement'),
+          },
+        ]}
+        {...tailFormItemLayout}
+      >
         <Checkbox>
           I have read the <a href="">agreement</a>
         </Checkbox>
